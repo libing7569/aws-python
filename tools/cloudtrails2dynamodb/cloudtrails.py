@@ -78,7 +78,6 @@ class CloudTrailProcessor(object):
         table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
         self.__dynamo_table_name = table_name
         logger.debug('%s created OK', table_name)
-        logger.debug('There is %d items in %s', table.item_count, table_name)
 
     def process(self):
         while True:
@@ -154,10 +153,7 @@ class CloudTrailProcessor(object):
         logger.debug("^^^^start2dynamo")
         
         with table.batch_writer() as batch:
-            logger.debug('%%%%start2with')
-            logger.debug('----items_count %d', len(items)) 
             for item in items:
-                logger.debug('====start2withfor')
                 real_item = {}
                 try:
                     real_item[u'事件ID'] = item['eventID']
